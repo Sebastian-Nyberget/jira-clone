@@ -1,3 +1,5 @@
+"use client";
+
 const SignInPage = () => {
   return (
     <div>
