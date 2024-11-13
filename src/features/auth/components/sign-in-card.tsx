@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from 'zod';
 import Link from 'next/link';
 import { FcGoogle } from 'react-icons/fc';
@@ -41,7 +43,7 @@ export const SignInCard = () => {
   };
 
     return (
-        <Card className='w-full h-full md:w[487px] border-none shadow-none'>
+        <Card className='w-full max-w-2xl h-full md:w[487px] border-none shadow-none'>
           <CardHeader className='flex items-center justify-center text-center p-7'>
             <CardTitle className='text-2xl'>
                 Velkommen tilbake!
