@@ -48,16 +48,16 @@ export const SignUpCard = () => {
         <Card className='w-full max-w-2xl h-full md:w[487px] border-none shadow-none'>
           <CardHeader className='flex items-center justify-center text-center p-7'>
             <CardTitle className='text-2xl'>
-                Registrer deg
+                Sign Up
             </CardTitle>
             <CardDescription>
-              Ved å registrere deg godtar du vår {" "}
+              By signing up, you agree to our {" "}
               <Link href="/privacy">
-                <span className='text-blue-700'>Personvernerklæring</span>
+                <span className='text-blue-700'>Privacy Policy</span>
               </Link>{" "}
               and{" "}
               <Link href="/vilkår">
-                <span className='text-blue-700'>Vilkår for Bruk</span>
+                <span className='text-blue-700'>Terms of Service</span>
               </Link>
             </CardDescription>
           </CardHeader>
@@ -76,7 +76,7 @@ export const SignUpCard = () => {
                         <Input
                         {...field}
                           type='text'
-                          placeholder='Navn'
+                          placeholder='Enter your name'
                           />
                         </FormControl>
                         <FormMessage />
@@ -92,7 +92,7 @@ export const SignUpCard = () => {
                         <Input
                         {...field}
                           type='email'
-                          placeholder='Email adresse'
+                          placeholder='Enter email address'
                           />
                         </FormControl>
                         <FormMessage />
@@ -108,7 +108,7 @@ export const SignUpCard = () => {
                         <Input
                         {...field}
                           type='password'
-                          placeholder='Passord'
+                          placeholder='Enter password'
                           />
                         </FormControl>
                         <FormMessage />
@@ -116,7 +116,7 @@ export const SignUpCard = () => {
                   )}
                 />
                 <Button disabled={isPending} size="lg" className='w-full'>
-                  Registrer
+                  Register
                 </Button>
               </form>
             </Form>
@@ -149,7 +149,7 @@ export const SignUpCard = () => {
           </div>
           <CardContent className='p-7 flex items-center justify-center'>
             <p>
-              Har du allerede en bruker?
+              Already have an account?
               <Link href="/sign-in">
                 <span className='text-blue-700'>&nbsp;Login</span>
               </Link>

@@ -46,7 +46,7 @@ export const SignInCard = () => {
         <Card className='w-full max-w-2xl h-full md:w[487px] border-none shadow-none'>
           <CardHeader className='flex items-center justify-center text-center p-7'>
             <CardTitle className='text-2xl'>
-                Velkommen tilbake!
+                Welcome back!
             </CardTitle>
           </CardHeader>
           <div className='px-7'>
@@ -64,7 +64,7 @@ export const SignInCard = () => {
                         <Input
                           {...field}
                           type='email'
-                          placeholder='Email adresse'
+                          placeholder='Enter email adress'
                           />
                         </FormControl>
                         <FormMessage />
@@ -80,7 +80,7 @@ export const SignInCard = () => {
                         <Input
                           {...field}
                           type='password'
-                          placeholder='Passord'
+                          placeholder='Enter password'
                           />
                         </FormControl>
                         <FormMessage />
@@ -122,9 +122,9 @@ export const SignInCard = () => {
           </div>
           <CardContent className='p-7 flex items-center justify-center'>
             <p>
-              Har du ikke en bruker?
+              Don&apos;t have an account?
               <Link href="/sign-up">
-                <span className='text-blue-700'>&nbsp;Registrer deg</span>
+                <span className='text-blue-700'>&nbsp;Sign Up</span>
               </Link>
             </p>
           </CardContent>
