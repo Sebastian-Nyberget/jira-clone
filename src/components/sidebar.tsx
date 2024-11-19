@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Navigation } from "./navigation";
 import { Separator } from "./ui/separator";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 
 export const Sidebar = () => {
     return ( 
@@ -10,6 +11,8 @@ export const Sidebar = () => {
           <Link href="/">
             <Image src="logo.svg" alt="Logo" width={164} height={48} />
           </Link>
+          <Separator className="my-4" />
+          <WorkspaceSwitcher />
           <Separator className="my-4" />
           <Navigation />
         </aside>
