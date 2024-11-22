@@ -19,6 +19,10 @@ const ProjectIdSettingsPage = async ({
     projectId: params.projectId,
   });
 
+  if (!initialValues) {
+    redirect("/projects");
+  }
+
   return (
     <div className="w-full lg:max-w-lg">
       <EditProjectForm initialValues={initialValues} />
