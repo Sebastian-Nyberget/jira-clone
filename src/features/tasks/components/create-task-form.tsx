@@ -55,7 +55,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
   });
 
   const onSubmit = (values: z.infer<typeof createTaskSchema>) => {
-    mutate({ form: {...values, workspaceId} }, {
+    mutate({ json: {...values, workspaceId} }, {
       onSuccess: () => {
         form.reset();
         // TODO: Redirect to new task

@@ -53,32 +53,32 @@ const app = new Hono()
       }
 
       const query = [
-        Query.equal("workspaceId", workspaceId),
+        Query.equal("workspaceId: ", workspaceId),
         Query.orderDesc("$createdAt")
       ];
 
       if (projectId) {
-        console.log("projectId ", projectId);
+        console.log("projectId: ", projectId);
         query.push(Query.equal("projectId", projectId));
       }
 
       if (status) {
-        console.log("status ", status);
+        console.log("status: ", status);
         query.push(Query.equal("status", status));
       }
 
       if (assigneeId) {
-        console.log("assigneeId ", assigneeId);
+        console.log("assigneeId: ", assigneeId);
         query.push(Query.equal("assigneeId", assigneeId));
       }
 
       if (dueDate) {
-        console.log("dueDate ", dueDate);
-        query.push(Query.equal("dueDate", dueDate));
-      }
+        console.log("dueDate: ", dueDate);
+        query.push(Query.equal("dueDate", dueDate.toISOString()));
+    }
 
       if (search) {
-        console.log("search ", search);
+        console.log("search: ", search);
         query.push(Query.search("name", search));
       }
 
