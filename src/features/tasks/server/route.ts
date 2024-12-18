@@ -53,7 +53,7 @@ const app = new Hono()
       }
 
       const query = [
-        Query.equal("workspaceId: ", workspaceId),
+        Query.equal("workspaceId", workspaceId),
         Query.orderDesc("$createdAt")
       ];
 
