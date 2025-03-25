@@ -19,13 +19,17 @@ import { useTaskFilters } from "../hooks/use-task-filters";
 
 interface DataFiltersProps {
   hideProjectFilter?: boolean;
-};
+}
 
-export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
+export const DataFilters = ({}: DataFiltersProps) => {
   const workspaceId = useWorkspaceId();
 
-  const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId });
-  const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId });
+  const { data: projects, isLoading: isLoadingProjects } = useGetProjects({
+    workspaceId,
+  });
+  const { data: members, isLoading: isLoadingMembers } = useGetMembers({
+    workspaceId,
+  });
 
   const isLoading = isLoadingProjects || isLoadingMembers;
 
@@ -38,25 +42,20 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
     value: member.$id,
     label: member.name,
   }));
-  
 
-  const [{
-    status,
-    assigneeId,
-    projectId,
-    dueDate
-  }, setFilters] = useTaskFilters();
+  const [{ status, assigneeId, projectId, dueDate }, setFilters] =
+    useTaskFilters();
 
   const onStatusChange = (value: string) => {
-    setFilters({ status: value === "all" ? null : value as TaskStatus });
+    setFilters({ status: value === "all" ? null : (value as TaskStatus) });
   };
 
   const onAssigneeChange = (value: string) => {
-    setFilters({ assigneeId: value === "all" ? null : value as string });
+    setFilters({ assigneeId: value === "all" ? null : (value as string) });
   };
 
   const onProjectChange = (value: string) => {
-    setFilters({ projectId: value === "all" ? null : value as string });
+    setFilters({ projectId: value === "all" ? null : (value as string) });
   };
 
   if (isLoading) return null;
@@ -128,9 +127,9 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
         className="h-8 w-full lg:w-auto"
         value={dueDate ? new Date(dueDate) : undefined}
         onChange={(date) => {
-          setFilters({ dueDate: date ? date.toISOString() : null })
+          setFilters({ dueDate: date ? date.toISOString() : null });
         }}
       />
     </div>
-  )
+  );
 };

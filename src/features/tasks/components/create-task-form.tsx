@@ -3,23 +3,22 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
+import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from "@/components/ui/form"
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 
 import { Separator } from "@/components/ui/separator";
@@ -32,43 +31,47 @@ import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 
-import { createTaskSchema } from "../schemas"
+import { createTaskSchema } from "../schemas";
 import { useCreateTask } from "../api/use-create-task";
 import { TaskStatus } from "../types";
- 
+
 interface CreateTaskFormProps {
   onCancel?: () => void;
-  projectOptions: { id: string, name: string, imageUrl: string }[];
-  memberOptions: { id: string, name: string }[];
-};
+  projectOptions: { id: string; name: string; imageUrl: string }[];
+  memberOptions: { id: string; name: string }[];
+}
 
-export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
+export const CreateTaskForm = ({
+  onCancel,
+  projectOptions,
+  memberOptions,
+}: CreateTaskFormProps) => {
   const workspaceId = useWorkspaceId();
-  const router = useRouter();
   const { mutate, isPending } = useCreateTask();
 
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema.omit({ workspaceId: true })),
     defaultValues: {
-        workspaceId
+      workspaceId,
     },
   });
 
   const onSubmit = (values: z.infer<typeof createTaskSchema>) => {
-    mutate({ json: {...values, workspaceId} }, {
-      onSuccess: () => {
-        form.reset();
-        onCancel?.();
+    mutate(
+      { json: { ...values, workspaceId } },
+      {
+        onSuccess: () => {
+          form.reset();
+          onCancel?.();
+        },
       }
-    });
+    );
   };
 
-  return(
+  return (
     <Card className="w-full h-full border-none shadow-none">
       <CardHeader className="flex p-7">
-        <CardTitle className="text-xl font-bold">
-          Create a new task
-        </CardTitle>
+        <CardTitle className="text-xl font-bold">Create a new task</CardTitle>
       </CardHeader>
       <div className="px-7">
         <Separator />
@@ -77,32 +80,25 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-y-4">
-              <FormField 
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                        Task Name
-                    </FormLabel>
+                    <FormLabel>Task Name</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field} 
-                        placeholder="Enter task name"
-                      />
+                      <Input {...field} placeholder="Enter task name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField 
+              <FormField
                 control={form.control}
                 name="dueDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                        Due Date
-                    </FormLabel>
+                    <FormLabel>Due Date</FormLabel>
                     <FormControl>
                       <DatePicker {...field} />
                     </FormControl>
@@ -110,14 +106,12 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                   </FormItem>
                 )}
               />
-              <FormField 
+              <FormField
                 control={form.control}
                 name="assigneeId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                        Assignee
-                    </FormLabel>
+                    <FormLabel>Assignee</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -132,7 +126,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                         {memberOptions.map((member) => (
                           <SelectItem key={member.id} value={member.id}>
                             <div className="flex items-center gap-x-2">
-                              <MemberAvatar 
+                              <MemberAvatar
                                 className="size-6"
                                 name={member.name}
                               />
@@ -146,14 +140,12 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                   </FormItem>
                 )}
               />
-              <FormField 
+              <FormField
                 control={form.control}
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                        Status
-                    </FormLabel>
+                    <FormLabel>Status</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -174,26 +166,20 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                         <SelectItem value={TaskStatus.IN_REVIEW}>
                           In Review
                         </SelectItem>
-                        <SelectItem value={TaskStatus.TODO}>
-                          Todo
-                        </SelectItem>
-                        <SelectItem value={TaskStatus.DONE}>
-                          Done
-                        </SelectItem>
+                        <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
+                        <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField 
+              <FormField
                 control={form.control}
                 name="projectId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                        Project
-                    </FormLabel>
+                    <FormLabel>Project</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -234,15 +220,11 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                 variant="secondary"
                 onClick={onCancel}
                 disabled={isPending}
-                className={cn(!onCancel && "invisible")} 
+                className={cn(!onCancel && "invisible")}
               >
                 Cancel
               </Button>
-              <Button
-                disabled={isPending}
-                type="submit"
-                size="lg"
-              >
+              <Button disabled={isPending} type="submit" size="lg">
                 Create Task
               </Button>
             </div>
@@ -250,5 +232,5 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 };
