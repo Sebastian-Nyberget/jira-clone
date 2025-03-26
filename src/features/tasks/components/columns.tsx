@@ -7,5 +7,6 @@ import { Task } from "../types";
 export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "name",
+    header: "Task Name",
   },
 ];

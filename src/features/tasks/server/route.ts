@@ -25,7 +25,7 @@ const app = new Hono()
         assigneeId: z.string().nullish(),
         status: z.nativeEnum(TaskStatus).nullish(),
         search: z.string().nullish(),
-        dueDate: z.date().nullish(),
+        dueDate: z.string().nullish(),
       })
     ),
     async (c) => {
@@ -33,28 +33,22 @@ const app = new Hono()
       const databases = c.get("databases");
       const user = c.get("user");
 
-      const {
-        workspaceId,
-        projectId,
-        status,
-        search,
-        assigneeId,
-        dueDate,
-      } = c.req.valid("query");
+      const { workspaceId, projectId, status, search, assigneeId, dueDate } =
+        c.req.valid("query");
 
       const member = await getMember({
         databases,
         workspaceId,
-        userId: user.$id
+        userId: user.$id,
       });
 
       if (!member) {
-        return c.json({ error: "Unauthorized" }, 401)
+        return c.json({ error: "Unauthorized" }, 401);
       }
 
       const query = [
         Query.equal("workspaceId", workspaceId),
-        Query.orderDesc("$createdAt")
+        Query.orderDesc("$createdAt"),
       ];
 
       if (projectId) {
@@ -74,8 +68,8 @@ const app = new Hono()
 
       if (dueDate) {
         console.log("dueDate: ", dueDate);
-        query.push(Query.equal("dueDate", dueDate.toISOString()));
-    }
+        query.push(Query.equal("dueDate", dueDate.toString()));
+      }
 
       if (search) {
         console.log("search: ", search);
@@ -105,23 +99,23 @@ const app = new Hono()
 
       const assignees = await Promise.all(
         members.documents.map(async (member) => {
-          const user = await users.get(member.userId)
+          const user = await users.get(member.userId);
 
           return {
             ...member,
             name: user.name,
             email: user.email,
-          }
+          };
         })
       );
 
       const populatedTasks = tasks.documents.map((task) => {
         const project = projects.documents.find(
-          (project) => project.$id === task.projectId,
+          (project) => project.$id === task.projectId
         );
 
         const assignee = assignees.find(
-          (assignee) => assignee.$id === task.assigneeId,
+          (assignee) => assignee.$id === task.assigneeId
         );
 
         return {
@@ -144,25 +138,19 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("json", createTaskSchema),
     async (c) => {
-      const user = c.get("user")
-      const databases = c.get("databases")
-      const {
-        name,
-        status,
-        workspaceId,
-        projectId,
-        dueDate,
-        assigneeId
-      } = c.req.valid("json");
+      const user = c.get("user");
+      const databases = c.get("databases");
+      const { name, status, workspaceId, projectId, dueDate, assigneeId } =
+        c.req.valid("json");
 
       const member = await getMember({
         databases,
         workspaceId,
-        userId: user.$id
+        userId: user.$id,
       });
 
       if (!member) {
-        return c.json({ error: "Unauthorized" }, 401)
+        return c.json({ error: "Unauthorized" }, 401);
       }
 
       const highestPositionTask = await databases.listDocuments(
@@ -173,13 +161,13 @@ const app = new Hono()
           Query.equal("workspaceId", workspaceId),
           Query.orderAsc("position"),
           Query.limit(1),
-        ],
+        ]
       );
 
       const newPosition =
         highestPositionTask.documents.length > 0
-        ? highestPositionTask.documents[0].position + 1000
-        : 1000;
+          ? highestPositionTask.documents[0].position + 1000
+          : 1000;
 
       const task = await databases.createDocument(
         DATABASE_ID,
@@ -192,8 +180,8 @@ const app = new Hono()
           projectId,
           dueDate,
           assigneeId,
-          position: newPosition
-        },
+          position: newPosition,
+        }
       );
 
       return c.json({ data: task });
