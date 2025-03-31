@@ -1,10 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "@hello-pangea/dnd";
+import React, { useState } from "react";
+import { DragDropContext } from "@hello-pangea/dnd";
 
 import { Task, TaskStatus } from "../types";
 import { KanbanColumnHeader } from "./kanban-column-header";
@@ -26,7 +21,7 @@ interface DataKanbanProps {
 }
 
 export const DataKanban = ({ data }: DataKanbanProps) => {
-  const [tasks, setTasks] = useState<TasksState>(() => {
+  const [tasks] = useState<TasksState>(() => {
     const initialTasks: TasksState = {
       [TaskStatus.BACKLOG]: [],
       [TaskStatus.TODO]: [],
