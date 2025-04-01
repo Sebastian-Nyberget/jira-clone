@@ -10,27 +10,25 @@ import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher
 
 interface ProjectIdPageProps {
   params: { projectId: string };
-};
+}
 
-const ProjectIdPage = async ({
-  params,
-}: ProjectIdPageProps) => {
-    const user = await getCurrent()
-    if (!user) redirect("/sign-in")
-    
-    const initialValues = await getProject({
-      projectId: params.projectId,
-    })
+const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
+  const user = await getCurrent();
+  if (!user) redirect("/sign-in");
 
-    if (!initialValues) {
-      throw new Error("Project not found");
-    }
+  const initialValues = await getProject({
+    projectId: params.projectId,
+  });
+
+  if (!initialValues) {
+    throw new Error("Project not found");
+  }
 
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
-          <ProjectAvatar 
+          <ProjectAvatar
             name={initialValues.name}
             image={initialValues.imageUrl}
             className="size-8"
@@ -39,16 +37,18 @@ const ProjectIdPage = async ({
         </div>
         <div>
           <Button variant="secondary" size="sm" asChild>
-            <Link href={`/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}/settings`}>
+            <Link
+              href={`/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}/settings`}
+            >
               <Pencil className="size-4 mr-2" />
               Edit Project
             </Link>
           </Button>
         </div>
       </div>
-      <TaskViewSwitcher />
+      <TaskViewSwitcher hideProjectFilter />
     </div>
   );
-}
- 
+};
+
 export default ProjectIdPage;
