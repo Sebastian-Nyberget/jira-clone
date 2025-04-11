@@ -37,4 +37,5 @@ next-env.d.ts
 
 # SEO
 public/sitemap.xml
+public/sitemap-*.xml
 public/robots.txt
