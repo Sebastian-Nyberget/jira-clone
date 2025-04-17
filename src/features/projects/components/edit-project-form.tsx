@@ -10,42 +10,43 @@ import { ArrowLeftIcon, ImageIcon } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { 
+import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
- } from "@/components/ui/form"
+  FormMessage,
+} from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
- import { Button } from "@/components/ui/button";
- import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { updateProjectSchema } from "../schemas";
 import { useUpdateProject } from "../api/use-update-project";
 import { Project } from "../types";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteProject } from "../api/use-delete-project";
- 
+
 interface EditProjectFormProps {
   onCancel?: () => void;
   initialValues: Project;
-};
+}
 
-export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProps) => {
+export const EditProjectForm = ({
+  onCancel,
+  initialValues,
+}: EditProjectFormProps) => {
   const router = useRouter();
   const { mutate, isPending } = useUpdateProject();
-  const {
-    mutate: deleteProject, 
-    isPending: isDeletingProject 
-  } = useDeleteProject();
+  const { mutate: deleteProject, isPending: isDeletingProject } =
+    useDeleteProject();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Project",
     "This action cannot be undone.",
-    "destructive",
+    "destructive"
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -53,8 +54,8 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
   const form = useForm<z.infer<typeof updateProjectSchema>>({
     resolver: zodResolver(updateProjectSchema),
     defaultValues: {
-        ...initialValues,
-        image: initialValues.imageUrl ?? "",
+      ...initialValues,
+      image: initialValues.imageUrl ?? "",
     },
   });
 
@@ -63,13 +64,16 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
 
     if (!ok) return;
 
-    deleteProject({
-      param: { projectId: initialValues.$id },
-    }, {
-      onSuccess: () => {
-        window.location.href = `/workspaces/${initialValues.workspaceId}`;
+    deleteProject(
+      {
+        param: { projectId: initialValues.$id },
       },
-    })
+      {
+        onSuccess: () => {
+          window.location.href = `/workspaces/${initialValues.workspaceId}`;
+        },
+      }
+    );
   };
 
   const onSubmit = (values: z.infer<typeof updateProjectSchema>) => {
@@ -80,11 +84,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
 
     mutate({
       form: finalValues,
-      param: { projectId: initialValues.$id }
-    }, {
-      onSuccess: () => {
-        form.reset();
-      }
+      param: { projectId: initialValues.$id },
     });
   };
 
@@ -95,12 +95,23 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
     }
   };
 
-  return(
+  return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
-          <Button size="sm" variant="secondary" onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`)}>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={
+              onCancel
+                ? onCancel
+                : () =>
+                    router.push(
+                      `/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`
+                    )
+            }
+          >
             <ArrowLeftIcon className="size-4 mr-2" />
             Back
           </Button>
@@ -115,25 +126,20 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-y-4">
-                <FormField 
+                <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                          Project Name
-                      </FormLabel>
+                      <FormLabel>Project Name</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field} 
-                          placeholder="Enter project name"
-                        />
+                        <Input {...field} placeholder="Enter project name" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField 
+                <FormField
                   control={form.control}
                   name="image"
                   render={({ field }) => (
@@ -144,7 +150,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
                             <Image
                               alt="Logo"
                               fill
-                              className="object-cover" 
+                              className="object-cover"
                               src={
                                 field.value instanceof File
                                   ? URL.createObjectURL(field.value)
@@ -164,7 +170,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
                           <p className="text-sm text-muted-foreground">
                             JPG, PNG, SVG or JPEG, max 1MB
                           </p>
-                          <input 
+                          <input
                             className="hidden"
                             type="file"
                             accept=".jpg, .png, .jpeg, .svg"
@@ -173,32 +179,32 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
                             disabled={isPending || isDeletingProject}
                           />
                           {field.value ? (
-                          <Button
-                            type="button"
-                            disabled={isPending || isDeletingProject}
-                            variant="destructive"
-                            size="xs"
-                            className="w-fit mt-2"
-                            onClick={() => inputRef.current?.click()}
-                          >
-                            Remove Image
-                          </Button>
+                            <Button
+                              type="button"
+                              disabled={isPending || isDeletingProject}
+                              variant="destructive"
+                              size="xs"
+                              className="w-fit mt-2"
+                              onClick={() => inputRef.current?.click()}
+                            >
+                              Remove Image
+                            </Button>
                           ) : (
-                          <Button
-                            type="button"
-                            disabled={isPending || isDeletingProject}
-                            variant="tertiary"
-                            size="xs"
-                            className="w-fit mt-2"
-                            onClick={() => {
-                              field.onChange(null);
-                              if (inputRef.current) {
-                                inputRef.current.value = "";
-                              }
-                            }}
-                          >
-                            Upload Image
-                          </Button>
+                            <Button
+                              type="button"
+                              disabled={isPending || isDeletingProject}
+                              variant="tertiary"
+                              size="xs"
+                              className="w-fit mt-2"
+                              onClick={() => {
+                                field.onChange(null);
+                                if (inputRef.current) {
+                                  inputRef.current.value = "";
+                                }
+                              }}
+                            >
+                              Upload Image
+                            </Button>
                           )}
                         </div>
                       </div>
@@ -216,7 +222,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
                   variant="secondary"
                   onClick={onCancel}
                   disabled={isPending || isDeletingProject}
-                  className={cn(!onCancel && "invisible")} 
+                  className={cn(!onCancel && "invisible")}
                 >
                   Cancel
                 </Button>
@@ -238,7 +244,8 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
           <div className="flex flex-col">
             <h3 className="font-bold">Danger Zone</h3>
             <p className="text-sm text-muted-foreground">
-              Deleting a project is irreversible and will remove all associated data.
+              Deleting a project is irreversible and will remove all associated
+              data.
             </p>
             <Separator className="my-7" />
             <Button
@@ -252,8 +259,8 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
               Delete Project
             </Button>
           </div>
-        </CardContent> 
+        </CardContent>
       </Card>
     </div>
-  )
+  );
 };

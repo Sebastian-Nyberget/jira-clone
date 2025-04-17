@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 import { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 import { client } from "@/lib/rpc";
 
@@ -14,7 +13,6 @@ type RequestType = InferRequestType<
 >;
 
 export const useUpdateTask = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -33,7 +31,6 @@ export const useUpdateTask = () => {
     onSuccess: ({ data }) => {
       toast.success("Task updated");
 
-      router.refresh();
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["task", data.$id] });
     },
